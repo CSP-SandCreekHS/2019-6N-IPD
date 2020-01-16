@@ -7,10 +7,23 @@
 ####
 
 team_name = 'Rubber Duckies' # Only 10 chars displayed.
-strategy_name = 'The name the team gives to this strategy'
-strategy_description = 'How does this strategy decide?'
+strategy_name = '''Betray if betrayed >33% of the time, always betray every 6
+                rounds, otherwise collude'''
+strategy_description = '''The algorithim will collude for 3 rounds, and then 
+                        check to see if it has been betrayed at least 1/3rd of
+                        the time. If it has, it will continue to betray until
+                        the other person has colluded 2/3rds of the time. If
+                        they always collude, it will betray every 6 rounds.'''
     
 def move(my_history, their_history, my_score, their_score):
+    if len(my_history) <= 3:
+        return 'c'
+    elif len(my_history) % 6 == 0:
+        return 'b'
+    elif their_history.count('b')/3. >= .33:
+        return 'b'
+    else:
+        return 'c'
     ''' Arguments accepted: my_history, their_history are strings.
     my_score, their_score are ints.
     
@@ -25,8 +38,6 @@ def move(my_history, their_history, my_score, their_score):
     
     # Analyze my_history and their_history and/or my_score and their_score.
     # Decide whether to return 'c' or 'b'.
-    
-    return 'c'
 
     
 def test_move(my_history, their_history, my_score, their_score, result):
@@ -35,6 +46,7 @@ def test_move(my_history, their_history, my_score, their_score, result):
     Returns True or False, dpending on whether result was as expected.
     '''
     real_result = move(my_history, their_history, my_score, their_score)
+    real_result = 'b'
     if real_result == result:
         return True
     else:
